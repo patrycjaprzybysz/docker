@@ -64,6 +64,11 @@ docker exec <id> cat skni.txt
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/c740ba0f-552a-423d-a923-b96e04a992ad)
 
 
+## 2. Jak działają obrazy dockerowe
+
+
+
+
 
 
 
