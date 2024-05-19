@@ -129,17 +129,82 @@ docker history vim_img
 
 ## 3. Docker hub
 
-* wyswitelenie wszystkich warstw składających się na vim_img
+Docker Hub jest hostowanym rejestrem Docker zarządzanym przez Docker. Docker Hub zawiera ponad 100 000 obrazów kontenerów, pochodzących od dostawców oprogramowania, projektów open source i społeczności.
+
+* pobranie i zapisanie obrazu
 
 ```
-docker history vim_img
+docker pull postgres
 ```
 
+*zmiana nazwy obrazu (stary obraz sie nie usuwa, id jest to samo)
+zeby ddoac obraz na docker hub musi byc zawarta nazwa uzytkownika
+
+```
+docker tag skni_img patrycjaprzybysz/obraz
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/5c77e959-a2a9-44f1-b398-11a3edb9dded)
+
+* wgrywanie obrazu
+
+```
+docker push patrycjaprzybysz/obraz
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/1a0e4d43-b5cc-47ed-b0f8-7f4cef780e30)
+
+## 4. Kopiowanie plików - Polecenie docker cp
+
+*skopiowanie pliku polega na podaniu miejsca kopiowanego pliku i miejsca do którego chcemy skopiowac ( . - bieżacy katalog)
+
+```
+ docker cp affectionate_banach:/skni.txt .
+
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/547778e7-791d-41b5-9610-89097092900c)
+
+* kopiowanie z powrotem do kontenera pliku
+
+  ```
+  docker cp skni.txt affectionate_banach:/
+  ```
+  
+## 5. Dockerfile, czyli automatyczne budowanie obrazów
+
+* stworzenie pliku Dockerfile i wpisanie tam komend
+
+```
+notepad Dockerfile
+
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/22c114bc-7101-4546-bb6d-5e174057593e)
+
+* zbudowanie dockerfile w biezącym katalogu
+
+```
+docker build .
+
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/43ff5f8d-995a-4aef-beb9-599afa7a9288)
+
+## 6. Nazwij obraz! | Tagowanie
+
+* zmiana nazwy obrazu
+
+```
+docker build --tag mojvim .
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/a966f1a8-fc42-4a19-b197-04e8d96def09)
+
+* zmiana nazwy po zbudowaniu
+
+```
+docker tag mojvim:latest mojvim:2.0
+
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/062049a8-8506-4ca5-9b0a-f995fb719156)
 
 
-
-
-
+## 7. Build Context
 
 
 
