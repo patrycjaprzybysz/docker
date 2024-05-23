@@ -206,7 +206,7 @@ docker tag mojvim:latest mojvim:2.0
 
 ## 7. Build Context
 
-*budowanie obrazu używając pliku Dockerfile znajdującego się poza bieżącym katalogiem
+* budowanie obrazu używając pliku Dockerfile znajdującego się poza bieżącym katalogiem
 
 ```
 docker build -f ../Dockerfile .
