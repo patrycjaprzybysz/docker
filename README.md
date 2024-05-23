@@ -213,5 +213,67 @@ docker build -f ../Dockerfile .
 ```
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/bd03d57b-531b-46f8-8fbb-72d285e841f2)
 
+## Konteneryzacja aplikacji konsolowej i webowej
+
+* utworzenie pliku z app.py
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/02ba3210-34cd-4adc-bfd8-3678afd3e2c1)
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/3ebb2930-555c-4b48-b32a-6ac6d1eb0844)
+
+* utworzenie pliku requirements.txt zawiera on komende "flask"
+* plik Dockerfile
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/c20ece9e-b1be-42a3-90b0-eb53a0c3e664)
+
+  *zbudowanie
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6a58132c-4f0d-4af6-9b3a-8f3b79a74e14)
+
+* uruchomienie aplikacji webowej
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/a331fe66-c74d-4350-b887-238fcbf9a4f2)
+
+* aplikacje konsolową tak samo sie buduje i uruchamia jest tylko inny wynik
+
+DODAJ ZDJ
+
+## 10. Polecenia ADD COPY i WORKDIR
+
+#### ADD
+Polecenie add ma takie same mozliwości jak copy, jednakże moze:
+* kopiowac elementy z okreslonej ścieżki url
+* może również rozpakowywać archiwa tar
+
+```
+# Użycie ADD do rozpakowywania archiwum tar
+ADD archive.tar.gz /path/in/container/
+
+# Użycie ADD do pobierania pliku z URL
+ADD http://example.com/file.txt /path/in/container/
+```
+
+ #### COPY
+
+Kopiuje pliki i katalogi z lokalnego systemu plików do systemu plików obrazu Docker. ma mozliwość:
+* kopiowac pliki do katalogów (jesli katalog nie istnieje zostanie on stworzony)
+  ```
+  COPY test.txt /moj_katalog/
+  ```
+* kopiowac katalogi do obrazu kontenera (*-wszytskie pliki)
+   ```
+  COPY katalog/* /moj_katalog/*
+  ```
+* mozna na raz kopiowac wiele plików
+   ```
+  COPY test.txt test1.txt /moj_katalog/
+  ```
+#### Workdir
+
+utworzy katalog jesli nie istenije, ustawia katalog roboczy dla wszystkich kolejnych instrukcji tzn. jesli ustawimy katalog /app to wszytskie polecenia np COPY test.txt będą zapisywane w tym katalogu
+
+```
+FROM ubuntu
+WORKDIR /app
+COPY text.txt .
+CMD pwd && ls
+```
+
+## 11. Czym różni się CMD od ENTRYPOINT
 
 
