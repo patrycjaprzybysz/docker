@@ -276,4 +276,6 @@ CMD pwd && ls
 
 ## 11. Czym różni się CMD od ENTRYPOINT
 
+#### CMD
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/2800256e-0a4c-4fca-a659-3b59cc04a214)
 
