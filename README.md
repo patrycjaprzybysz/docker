@@ -359,8 +359,137 @@ tak samo jak CMD występuje w formie shellowej i exec tzn ``` ENTRYPOINT ls ``` 
 
 CMD zostanie wykorzystane jako domyslne parametry dla ENTRYPOINTA. w tym przypadku zostanie uruchomione ```ls -al /test```. Uzycie CMD umozliwia nadpisanie poleceń. 
 
-po wpisaniu komendy ``` docker run entry /etc``` polecenie '''/test``` zostanie zastąpione ```/etc```
+po wpisaniu komendy ``` docker run entry /etc``` polecenie ```/test``` zostanie zastąpione ```/etc```
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/19191365-404d-4225-a955-3492781469c0)
 
 ## 11. Dane w kontenerze: VOLUMES
+
+Docker wolumeny (volumes) to sposób zarządzania danymi tworzonymi i używanymi przez kontenery. Wolumeny umożliwiają przechowywanie danych nawet po ponownym uruchomieniu lub usunięciu kontenera i mogą być współdzielone między wieloma kontenerami
+
+#### Wolumeny zarządzane przez dockera (VOLUME)
+
+* utworzenie
+```
+docker volume create moj-volume
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/ab9bbb17-86e0-4458-a2eb-859596eb1edc)
+
+* usunięcie
+```
+docker volume rm moj-volume
+```
+* utworzenie vol.Dockerfile
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9774962b-9ec5-4807-afa5-94abd957839b)
+
+* zbudowanie
+```
+docker build -f vol.Dockerfile -t vol_test .
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/2946b138-5538-48e8-a3c3-713646ece250)
+
+* uruchomienie
+```
+docker run vol_test
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/afc3ade4-7570-44ad-b373-b539c09d65e1)
+
+* uzycie wolumenu
+```
+docker run --volume moj-volume:/katalog vol_test
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/029ba6a0-31ca-4008-b72b-c9d16a275809)
+
+dzięki temu jesteśmy w stanie zapisac na stałe jakies dane z kontenera
+
+#### Anonimowe wolumeny
+
+nie trzeba podawac nazwy volumenu, docker sam ją stworzy
+
+```
+docker run --volume /katalog vol_test
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/a38dbe62-7116-4ced-9507-1cc4e9f7f972)
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/c7237bf0-4924-446a-8e89-a9fc69c91fda)
+
+#### Bind mount
+
+umozliwia łączenie kontenerów z plikami lokalnymi
+
+* uruchomienie z podaniem sciezki, gdzie chcemy utworzyc volume
+```
+docker run --volume //c/Users/patip/python2/katalog:/katalog vol_test
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9d804d3b-1a1f-49b8-92e3-5f0038af1c1d)
+
+* zawartosc katalogu
+```
+dir katalog
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/58148567-9e6f-4bfb-a3b8-768604cc1865)
+
+ * obserwowanie zmian w katalogu
+   ```
+   docker run -it --volume //c/Users/patip/python2/katalog:/katalog vol_test watch ls /katalog
+   ```
+   ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6eaf3093-3296-40df-a286-01fa4f6d2e02)
+
+zmiany lokalne pojawiaja sie w katalogu
+
+## 12. Baza danych w kontenerze
+
+* wypisanie wszystkich zmiennych srodowiskowych
+```
+docker run ubuntu env
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/fb25c5a2-29d5-4ae7-8ebb-f31b79a3055b)
+
+* dodanie zmiennej środowiskowej
+```
+docker run -e MOJA_ZMIENNA=true ubuntu env
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/8b240c57-c8cc-482e-8668-e01803deb378)
+
+* wykorzystanie obrazu postgresa do uruchomienia bazy danych w kontenerze
+
+```
+docker run --name baza --detach -e POSTGRES_PASSWORD=haslo postgres
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/177c5c88-074a-496b-bf1d-93f057d6df13)
+
+* uruchomienie wiersza polecen postgresa do wykonywania polecen
+
+```
+docker exec -it baza psql --username postgres
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6ff1e338-828d-4569-a662-f2dd76f7b8a6)
+
+wyjście z wiersza poleceń wykonujemy komenda ``` \q```
+zatrzymanie bazy wykonujemy komenda ```docker stop baza```
+
+* tworzenie bazy z wolumenami aby zapisywac zmiany
+
+```
+docker run --name baza --detach -e POSTGRES_PASSWORD=haslo --volume dane_bazy:/var/lib/postgresql/data po
+stgres
+```
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/c1a4d17f-89f5-4cef-aa66-dd76b5fbf7c0)
+
+* po usunieciu bazy jego volume dalej istnieje
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/0f3ea9e7-913b-4bd4-9592-ac22c881a867)
+
+* gdy na nowo utworzymy baze z tym samym volumenem będziemy miec jej zawartosc
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/d5b8b043-3205-44f0-ab2c-9fc58999bb02)
+
+* podpięcie z zewnatrz z bazą danych (porty)
+
+```
+docker run --name baza --detach -e POSTGRES_PASSWORD=haslo -e POSTGRES_USER=ja --volume dane_bazy:/var/lib/postgresql/data -p 5432:5432 postgres
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/bc9953e0-d786-4d99-b6cd-390898ab34b2)
+
+## 13. Polecenie Docker Inspect
+
 
