@@ -1,4 +1,5 @@
-# docker
+# Docker
+nauka dockera korzystając z kursu https://www.youtube.com/playlist?list=PLkcy-k498-V5AmftzfqinpMF2LFqSHK5n
 
 
 
