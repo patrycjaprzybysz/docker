@@ -546,11 +546,68 @@ ping google.com
 
 ```
 ping 172.17.05
-``
+```
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/45caf9c1-55d8-46dc-8383-ec675d9d8fd1)
 
 #### tworzenie własnej sieci typu bridge
 
+1. mozna podłączac i odłączac kontenery od naszej sieci w trakcie działania kontenerów
+2. mozna dowolnie wybierac kontenery które mogą byc podłaczone do naszej sieci
+3. mozna pingowac po nazwie kontenera
 
+* utworzenie sieci
 
+```
+docker network create --driver bridge moja-siec
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9742da0d-f9c0-4b0a-8123-4866c2258a66)
+* utworzenie kontenreów podłączonych do domyslnej sieci
+```
+docker run -dit --name contA busybox
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/387886e5-8625-4da5-bb4b-f776a714c15e)
 
+* utworzenie kontenera podłączonego do sieci moja-siec
+```
+docker run -dit --name contC --network moja-siec busybox
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/fdd022b5-869e-46bc-8a7e-8031a821dd54)
+
+* podłączenie kontenerów do konkretnej sieci
+
+```
+docker network connect moja-siec contB
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/4c207800-e9d8-4677-ae07-b734ad90c5c2)
+
+* działanie sieci w kontenerze c (połaczenie z google.com i z contB)
+  
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/3f7f4834-4ebc-4c58-9135-f879a2dbdf2a)
+
+* kontener B contB ma podłaczenie do dwóch sieci
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/ba27a42e-5357-44e6-a248-a4b947753bbe)
+
+* z kontenera B nie mogłam połączyć sie z contC ani po ip ani po nazwie. Mogłam się połączyć z kontenerem A contA tylko po ip
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/716341e6-8644-49c5-a983-f238e8419d23)
+
+## 15. Sieci w praktyce | Łączymy kontenery!
+
+* utworzenie sieci
+```
+docker network create baza-net
+```
+* utworzenie bazy podpiętej pod stworzoną siec
+```
+docker run --name baza -v dane_bazy:/var/lib/postgresql/data -e POSTGRES_DB=mojabaza -e POSTGRES_USER=ja -e POSTGRES_PASSWORD=mojehaslo --network baza-net --detach postgres
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/3a5e273f-351c-4eba-90b1-d14de7a5347e)
+
+* uruchomienie kontenera na konkretnym porcie korzystajac z obrazu adminer
+
+```
+docker run -p 8080:8080 --network baza-net adminer
+```
+
+## 16. Do czego służy Docker Compose?
