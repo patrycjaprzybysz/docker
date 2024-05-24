@@ -213,7 +213,7 @@ docker build -f ../Dockerfile .
 ```
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/bd03d57b-531b-46f8-8fbb-72d285e841f2)
 
-## Konteneryzacja aplikacji konsolowej i webowej
+## 8. Konteneryzacja aplikacji konsolowej i webowej
 
 * utworzenie pliku z app.py
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/02ba3210-34cd-4adc-bfd8-3678afd3e2c1)
@@ -233,7 +233,7 @@ docker build -f ../Dockerfile .
 
 DODAJ ZDJ
 
-## 10. Polecenia ADD COPY i WORKDIR
+## 9. Polecenia ADD COPY i WORKDIR
 
 #### ADD
 Polecenie add ma takie same mozliwości jak copy, jednakże moze:
@@ -274,8 +274,93 @@ COPY text.txt .
 CMD pwd && ls
 ```
 
-## 11. Czym różni się CMD od ENTRYPOINT
+## 10. Czym różni się CMD od ENTRYPOINT
 
 #### CMD
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/2800256e-0a4c-4fca-a659-3b59cc04a214)
+
+* można wpisywać komendy które mają się wykonać w dwóch formach
+  1. powershell
+     ```
+     CMD ls /test
+     ```
+  3. exec (do uruchamiania pojedynczych programów)
+     ```
+     CMD ['ls', 'test']
+     ```
+
+* zbudowanie cmd
+  ```
+  docker build -f cmd.Dockerfile -t cmd .
+  ```
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/5d68b410-0d2d-4344-aa3e-d12b14be8861)
+
+* odpalenie (wykona sie ls)
+
+```
+docker run cmd
+```
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/b2bf8a77-6afb-4d7f-9a2a-056ff7725b90)
+
+* uruchomienie innego polecenia w obrazie (zamiana ls na uname -a - nadpisanie)
+  
+```
+docker run cmd uname -a
+```
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/ad73fd9a-17da-4a45-82ac-ea9e748977ec)
+
+* nie da się dopisac polecenia (żeby wykonało sie ls a potem /dev)
+  ```
+  docker run cmd /dev
+  ```
+  polecenie sie nadpisuje
+
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/45b1a7ab-8f49-4d9f-aed7-1bc82f0030ca)
+
+można jedynie tak wykonać to polecenie
+```
+docker run cmd ls/dev
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/ee4378c2-2774-4334-bdec-2ac8d3724e13)
+
+#### ENTRYPOINT
+
+tak samo jak CMD występuje w formie shellowej i exec tzn ``` ENTRYPOINT ls ``` lub ```ENTRYPOINT ['ls']```
+
+* zbudowanie
+  ```
+  docker build entrypoint.Dockerfile -t entry .
+  ```
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9a799ee8-7b03-4696-8a35-b3d87a41c3b9)
+
+* uruchomienie
+  ```
+  docker run entry
+  ```
+  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/156bf0cc-6c87-430a-b105-56887c707a6c)
+
+* ENTRYPOINT umozliwia dopisanie polecenia przy uruchomieniu NIE nadpisuje plików, przekazuje jako parametr na końcu
+
+  ```
+  docker run entry /test
+  ```
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/869ce974-8d99-438c-9fa7-5171c46dc4b3)
+
+* można nadpisać polecenia w ENTRYPOINT ręcznie
+  ```
+  docker run --entrypoint pwd entry
+  ```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6372c847-1d0b-4202-931d-1caea38a8cec)
+
+#### CMD i ENTRYPOINT
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/3ab7b567-3e35-4f74-a928-c5f85b5bf715)
+
+CMD zostanie wykorzystane jako domyslne parametry dla ENTRYPOINTA. w tym przypadku zostanie uruchomione ```ls -al /test```. Uzycie CMD umozliwia nadpisanie poleceń. 
+
+po wpisaniu komendy ``` docker run entry /etc``` polecenie '''/test``` zostanie zastąpione ```/etc```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/19191365-404d-4225-a955-3492781469c0)
+
+## 11. Dane w kontenerze: VOLUMES
 
