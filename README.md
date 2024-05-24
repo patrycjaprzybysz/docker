@@ -492,4 +492,65 @@ docker run --name baza --detach -e POSTGRES_PASSWORD=haslo -e POSTGRES_USER=ja -
 
 ## 13. Polecenie Docker Inspect
 
+pokazuje duzo informacji o kontenerze
+
+```
+docker inspect 953cf
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/a9803567-7b12-459b-9dc2-458d286b3742)
+
+## 14. Docker Networks: wirtualne sieci w kontenerach
+
+służa do komunikacji pomiędzy kontenerem a internetem oraz pomiedzy kontenerami na tym samym hostcie. Docker automatycznie tworzy sieci dla kontenerów.
+
+* wypisanie sieci
+```
+docker network ls
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/905982ba-4b92-4df1-bf8f-a954f470ebb0)
+
+#### sieć bridge (domyslna, tworzona automatycznie)
+
+* uruchomienie kilku kontenerów na podstawie obrazu busybox
+
+```
+docker run -dit --name contA busybox
+```
+
+* kontenery podłaczone automatycznie do sieci (mogą korzystac z internetu)
+
+``` docker network inspect```
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/71819b45-efff-4a8f-bad6-f8b3af4d19fd)
+
+* odpalenie terminala kontenera A
+
+```
+docker attach contA
+```
+* sprawdzenie interfejsów sieci i adresu IP kontenera
+
+```
+ip addr
+```
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/82dbbbd1-e730-470a-809b-850c7479c8ff)
+
+* sprawdzenie połaczenia z siecią
+```
+ping google.com
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/874f8615-92e7-4502-ae4e-c0a843639759)
+
+* połaczenie z drugim kontenerem
+
+```
+ping 172.17.05
+``
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/45caf9c1-55d8-46dc-8383-ec675d9d8fd1)
+
+#### tworzenie własnej sieci typu bridge
+
+
+
 
