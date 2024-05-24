@@ -609,5 +609,10 @@ docker run --name baza -v dane_bazy:/var/lib/postgresql/data -e POSTGRES_DB=moja
 ```
 docker run -p 8080:8080 --network baza-net adminer
 ```
+* na porcie 8080 panel administracyjny
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/ddb052e9-011b-4393-8580-4dd139f05721)
+
 
 ## 16. Do czego służy Docker Compose?
+
