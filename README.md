@@ -617,3 +617,32 @@ docker run -p 8080:8080 --network baza-net adminer
 
 ## 16. Do czego służy Docker Compose?
 
+Docker Compose system do automatyzacji uruchamiania i budowania wielu kontenerów na raz. Jest domyślnie zainstalowany.
+
+* uruchomienie docker compose
+
+```
+docker-compose
+```
+
+*utworzenie pliku docker-compose.yml
+
+```
+notepad docker-compose.yml
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9eed204e-8231-4a49-ba3b-c749d2195470)
+
+* uruchomienie pliku
+
+```
+docker-compose up
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/d0d2c588-898d-4ab1-a957-cb7117978cab)
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/1077e971-5ab4-4dba-88c5-02ff5fc24704)
+
+* zalogowanie sie do panelu administratora ```localhost:8080```
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/cf8734b4-9f81-4dc6-ada4-bd5c1f39ea34)
+
+
