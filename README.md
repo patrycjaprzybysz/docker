@@ -218,21 +218,22 @@ docker build -f ../Dockerfile .
 
 * utworzenie pliku z app.py
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/02ba3210-34cd-4adc-bfd8-3678afd3e2c1)
+
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/3ebb2930-555c-4b48-b32a-6ac6d1eb0844)
 
 * utworzenie pliku requirements.txt zawiera on komende "flask"
+  
 * plik Dockerfile
-  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/c20ece9e-b1be-42a3-90b0-eb53a0c3e664)
+ ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/c20ece9e-b1be-42a3-90b0-eb53a0c3e664)
 
-  *zbudowanie
-  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6a58132c-4f0d-4af6-9b3a-8f3b79a74e14)
+* zbudowanie
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6a58132c-4f0d-4af6-9b3a-8f3b79a74e14)
 
 * uruchomienie aplikacji webowej
-  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/a331fe66-c74d-4350-b887-238fcbf9a4f2)
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/a331fe66-c74d-4350-b887-238fcbf9a4f2)
 
 * aplikacje konsolową tak samo sie buduje i uruchamia jest tylko inny wynik
 
-DODAJ ZDJ
 
 ## 9. Polecenia ADD COPY i WORKDIR
 
