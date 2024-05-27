@@ -892,10 +892,46 @@ docker run -p 8080:8080 frontend
 ```
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/7139ebe0-f575-45f0-9f51-22d7d7eb6c5a)
 
-## 20. Zmniejsz obraz używając FROM scratch
+## 20. Zmniejsz obraz używając FROM scratch!
 
 * utworzenie aplikacji w języku C
 
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/374faf0d-0f2a-41e8-849c-4c146e461fa2)
 
+* utworzenie Dockerfile
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/f97252f7-c49c-439f-943f-84f17e37927d)
+
+* zbudowanie
+
+```
+docker build -t capp .
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/2cc55389-3eaa-4335-817c-58596df323ea)
+
+zaletą stwosowania FROM scratch jest to, że cały obraz bardzo mało wazy, mamy tylko potrzebne pliki, mznijesza się powierzchnia ataków na nasze aplikacje. Wadą jest to, że nie można np do ENTRYPOINT dodawać nowych poleceń. Nie ma tam shella, basha
 
 ## 21. 5 sposobów optymalizacji obrazów Dockerowych + bonus
+
+#### Kolejność poleceń w dockerfile
+
+* paczki systemu operacyjnego powinny być na samej górze naszego obrazu, bo będziemy je najrzadziej zmieniać
+* jako drugie pośpośrednie zależnosci aplikacji np. paczki node, biblioteki do programu
+* jako trzeci kod naszej aplikacji (będzie zmieniał sie najczęściej)
+
+#### Łączenie poleceń
+
+* aktualizacja paczek np. ```app-get update``` a potem ```app-get install``` w jednej linii łącząc && (mamy jedną warstwę dzieki temu)
+
+#### Obrazy slim
+
+* obrazy typu ubuntu lub debian są bardzo duże, dlatego warto korzystać z edycji slim np. ``` FROM debian:10-slim```
+
+#### Obraz alpine
+
+* korzsytać z obrazu bazowego ```FROM alpine```, mają troche inna składnie potrzebny jest przedrostek ```apk```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/156e41ac-dc42-40d3-b3bd-8c9723cd353c)
+
+#### plik .dockerignore
+
+* działa jak .gitignore, pliki które się tam znajdują sie zostana wysłane jako docker build context do docker demona. (skraca to budowanie obrazu)
+
