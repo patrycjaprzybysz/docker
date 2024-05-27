@@ -332,13 +332,13 @@ tak samo jak CMD występuje w formie shellowej i exec tzn ``` ENTRYPOINT ls ``` 
   ```
   docker build entrypoint.Dockerfile -t entry .
   ```
-  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9a799ee8-7b03-4696-8a35-b3d87a41c3b9)
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9a799ee8-7b03-4696-8a35-b3d87a41c3b9)
 
 * uruchomienie
   ```
   docker run entry
   ```
-  ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/156bf0cc-6c87-430a-b105-56887c707a6c)
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/156bf0cc-6c87-430a-b105-56887c707a6c)
 
 * ENTRYPOINT umozliwia dopisanie polecenia przy uruchomieniu NIE nadpisuje plików, przekazuje jako parametr na końcu
 
@@ -429,11 +429,11 @@ dir katalog
 ```
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/58148567-9e6f-4bfb-a3b8-768604cc1865)
 
- * obserwowanie zmian w katalogu
-   ```
-   docker run -it --volume //c/Users/patip/python2/katalog:/katalog vol_test watch ls /katalog
-   ```
-   ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6eaf3093-3296-40df-a286-01fa4f6d2e02)
+* obserwowanie zmian w katalogu
+```
+docker run -it --volume //c/Users/patip/python2/katalog:/katalog vol_test watch ls /katalog
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6eaf3093-3296-40df-a286-01fa4f6d2e02)
 
 zmiany lokalne pojawiaja sie w katalogu
 
@@ -871,9 +871,11 @@ Mechanizm który pozwala korzytstać z kilku różnych obrazów w dockerfilu wyk
 * utworzenie aplikacji w reakcie ```npx create-react-app docker_react```
 * ```type package.json```
 * utworzenie dockerfile
+
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9ab201cf-08de-403e-9f19-cdbb8f7f355e)
 
 * utworzenie pliku nginx.config
+
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/e93429ae-110d-467b-a46c-f1e1ddb2ae45)
 
 * zbudowanie obrazu
