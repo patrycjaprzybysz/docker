@@ -645,4 +645,255 @@ docker-compose up
 
 ![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/cf8734b4-9f81-4dc6-ada4-bd5c1f39ea34)
 
+## 17. Jak uruchomić aplikację w Django używając Docker Compose?
 
+* utworzenie pliku Dockerfile do uruchomienia aplikacji Django
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/82c65caf-2fff-4511-a390-9322e2e60032)
+
+* zbudowanie
+```
+docker build -t django .
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/597f5891-6204-4025-b088-96af0e1b097b)
+
+wystąpiły błędy zmieniłam plik Dockerfile
+
+```
+C:\Users\patip\django>docker run -p 8082:8080 django
+[2024-05-26 21:20:34 +0000] [7] [INFO] Starting gunicorn 22.0.0
+[2024-05-26 21:20:34 +0000] [7] [INFO] Listening at: http://0.0.0.0:8080 (7)
+[2024-05-26 21:20:34 +0000] [7] [INFO] Using worker: sync
+[2024-05-26 21:20:34 +0000] [9] [INFO] Booting worker with pid: 9
+[2024-05-26 21:20:34 +0000] [9] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.8/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.8/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.8/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.8/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.8/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.8/site-packages/gunicorn/util.py", line 371, in import_app
+    mod = importlib.import_module(module)
+  File "/usr/local/lib/python3.8/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 961, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 973, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'mysite'
+[2024-05-26 21:20:34 +0000] [9] [INFO] Worker exiting (pid: 9)
+[2024-05-26 21:20:34 +0000] [7] [ERROR] Worker (pid:9) exited with code 3
+[2024-05-26 21:20:34 +0000] [7] [ERROR] Shutting down: Master
+[2024-05-26 21:20:34 +0000] [7] [ERROR] Reason: Worker failed to boot.
+```
+* nowy plik Dockerfile
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/7a6abbb3-c2ff-46b8-9bd7-bc0cbd01a28d)
+
+* zbudowanie
+```
+docker build -t django .
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/a6a94c17-5f38-402e-a17e-4f4d692cc8b7)
+
+* uruchomienie
+
+```
+docker run -p 8082:8080 django
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/99ecaef2-a302-4981-af94-0d31443a67d0)
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/5fd3c39c-cb79-4c7c-b13a-e41937e7b9f8)
+
+* plik docker-compose.yml
+
+```
+version: "3"
+services:
+  baza:
+    image: postgres
+    volumes:
+      - dane_bazy:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ja
+      POSTGRES_DB: mojabaza
+      POSTGRES_PASSWORD: mojehaslo
+    networks:
+      - baza-net
+  django:
+    build: ./django
+    image: django_img
+    networks:
+      - baza-net
+    ports:
+      - 8080:8080
+    depends_on:
+      - baza
+networks:
+  baza-net:
+volumes:
+  dane_bazy:
+```
+* zbudowanie
+```
+docker-compose up --build
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/366d37ca-861c-41a6-80d8-962d3a4d2179)
+
+* zmiana setting.py w aplikacji django
+  
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/aaf74b63-5bb0-4c8a-b71f-db9fafc5f428)
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/c012f2bf-602d-4151-94e2-7847d524f9cd)
+
+* dodanie zależnosci do pliku requirements.txt
+
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/7663df4d-db66-4a86-b929-1540420658df)
+
+* problem z połaczeniem z baza
+
+```
+ => ERROR [django 6/7] RUN python manage.py migrate        4.8s
+------
+ > [django 6/7] RUN python manage.py migrate:
+4.645 Traceback (most recent call last):
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/base/base.py", line 219, in ensure_connection
+4.645     self.connect()
+4.645   File "/usr/local/lib/python3.8/site-packages/django/utils/asyncio.py", line 33, in inner
+4.645     return func(*args, **kwargs)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/base/base.py", line 200, in connect
+4.645     self.connection = self.get_new_connection(conn_params)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/utils/asyncio.py", line 33, in inner
+4.645     return func(*args, **kwargs)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/postgresql/base.py", line 187, in get_new_connection
+4.645     connection = Database.connect(**conn_params)
+4.645   File "/usr/local/lib/python3.8/site-packages/psycopg2/__init__.py", line 122, in connect
+4.645     conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+4.645 psycopg2.OperationalError: could not translate host name "baza" to address: Name or service not known
+4.645
+4.645
+4.645 The above exception was the direct cause of the following exception:
+4.645
+4.645 Traceback (most recent call last):
+4.645   File "manage.py", line 22, in <module>
+4.645     main()
+4.645   File "manage.py", line 18, in main
+4.645     execute_from_command_line(sys.argv)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/management/__init__.py", line 419, in execute_from_command_line
+4.645     utility.execute()
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/management/__init__.py", line 413, in execute
+4.645     self.fetch_command(subcommand).run_from_argv(self.argv)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/management/base.py", line 354, in run_from_argv
+4.645     self.execute(*args, **cmd_options)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/management/base.py", line 398, in execute
+4.645     output = self.handle(*args, **options)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/management/base.py", line 89, in wrapped
+4.645     res = handle_func(*args, **kwargs)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/management/commands/migrate.py", line 75, in handle
+4.645     self.check(databases=[database])
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/management/base.py", line 419, in check
+4.645     all_issues = checks.run_checks(
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/checks/registry.py", line 76, in run_checks
+4.645     new_errors = check(app_configs=app_configs, databases=databases)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/core/checks/model_checks.py", line 34, in check_all_models
+4.645     errors.extend(model.check(**kwargs))
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/models/base.py", line 1303, in check
+4.645     *cls._check_indexes(databases),
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/models/base.py", line 1695, in _check_indexes
+4.645     connection.features.supports_covering_indexes or
+4.645   File "/usr/local/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+4.645     res = instance.__dict__[self.name] = self.func(instance)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/postgresql/features.py", line 92, in is_postgresql_11
+4.645     return self.connection.pg_version >= 110000
+4.645   File "/usr/local/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+4.645     res = instance.__dict__[self.name] = self.func(instance)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/postgresql/base.py", line 329, in pg_version
+4.645     with self.temporary_connection():
+4.645   File "/usr/local/lib/python3.8/contextlib.py", line 113, in __enter__
+4.645     return next(self.gen)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/base/base.py", line 603, in temporary_connection
+4.645     with self.cursor() as cursor:
+4.645   File "/usr/local/lib/python3.8/site-packages/django/utils/asyncio.py", line 33, in inner
+4.645     return func(*args, **kwargs)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/base/base.py", line 259, in cursor
+4.645     return self._cursor()
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/base/base.py", line 235, in _cursor
+4.645     self.ensure_connection()
+4.645   File "/usr/local/lib/python3.8/site-packages/django/utils/asyncio.py", line 33, in inner
+4.645     return func(*args, **kwargs)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/base/base.py", line 219, in ensure_connection
+4.645     self.connect()
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/utils.py", line 90, in __exit__
+4.645     raise dj_exc_value.with_traceback(traceback) from exc_value
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/base/base.py", line 219, in ensure_connection
+4.645     self.connect()
+4.645   File "/usr/local/lib/python3.8/site-packages/django/utils/asyncio.py", line 33, in inner
+4.645     return func(*args, **kwargs)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/base/base.py", line 200, in connect
+4.645     self.connection = self.get_new_connection(conn_params)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/utils/asyncio.py", line 33, in inner
+4.645     return func(*args, **kwargs)
+4.645   File "/usr/local/lib/python3.8/site-packages/django/db/backends/postgresql/base.py", line 187, in get_new_connection
+4.645     connection = Database.connect(**conn_params)
+4.645   File "/usr/local/lib/python3.8/site-packages/psycopg2/__init__.py", line 122, in connect
+4.645     conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+4.645 django.db.utils.OperationalError: could not translate host name "baza" to address: Name or service not known
+4.645
+------
+failed to solve: process "/bin/sh -c python manage.py migrate" did not complete successfully: exit code: 1
+```
+* dodawanie konta
+```
+docker-compose exec django python manage.py migrate
+docker-compose exec django python manage.py migrate createsuperuser
+```
+
+
+
+## 18. NGINX jako reverse proxy aplikacji w django i docker compose
+
+nie działa mi poprzednie wiec to tez nie zadziała
+
+## 19. Jak wykorzystać Multi-Stage build w twoim obrazie? 
+
+Mechanizm który pozwala korzytstać z kilku różnych obrazów w dockerfilu wykonać różne operacje i opublikować jeden z tych obrazów.
+
+* utworzenie aplikacji w reakcie ```npx create-react-app docker_react```
+* ```type package.json```
+* utworzenie dockerfile
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/9ab201cf-08de-403e-9f19-cdbb8f7f355e)
+
+* utworzenie pliku nginx.config
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/e93429ae-110d-467b-a46c-f1e1ddb2ae45)
+
+* zbudowanie obrazu
+
+```
+docker build -t frontend .
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/6e2d0cac-c309-41a1-93c4-1349e017cfd9)
+
+* uruchomienie obrazu
+
+```
+docker run -p 8080:8080 frontend
+```
+![image](https://github.com/patrycjaprzybysz/docker/assets/100605325/7139ebe0-f575-45f0-9f51-22d7d7eb6c5a)
+
+## 20. Zmniejsz obraz używając FROM scratch
+
+* utworzenie aplikacji w języku C
+
+
+
+## 21. 5 sposobów optymalizacji obrazów Dockerowych + bonus
